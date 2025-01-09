@@ -1,7 +1,7 @@
 # Serverless Web Application on AWS
 
 This repository contains a **Serverless Web Application** built using **AWS Amplify**. The application is fully managed and hosted on AWS, leveraging the power of Amplify for rapid deployment and scalability.
-
+ https://atharv22k.github.io/AWS-serverless-web-hosting/
 ## Features
 
 - **Fully Serverless**: No need to manage servers or infrastructure.
