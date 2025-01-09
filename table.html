@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: url('https://watermark.lovepik.com/photo/40145/2852.jpg_wh1200.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #ffffff;
+        }
+
+        h2 {
+            font-size: 36px;
+            color: #00FFFF;
+            margin-top: 30px;
+            text-align: center;
+            text-shadow: 2px 2px 5px rgba(0, 255, 255, 0.7);
+        }
+
+        nav {
+            margin-top: 20px;
+        }
+
+        nav a {
+            color: #00CED1;
+            text-decoration: none;
+            font-size: 24px;
+            margin: 0 15px;
+            padding: 10px 20px;
+            border: 2px solid #00CED1;
+            border-radius: 8px;
+            text-shadow: 2px 2px 5px rgba(0, 255, 255, 0.7);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        nav a:hover {
+            background-color: #20B2AA;
+            transform: translateY(-2px);
+        }
+
+        table {
+            width: 90%;
+            max-width: 800px;
+            border-collapse: collapse;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            background-color: rgba(10, 10, 46, 0.9);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0px 0px 20px rgba(0, 255, 255, 0.5);
+        }
+
+        th, td {
+            border: none;
+            padding: 15px;
+            text-align: left;
+            font-size: 18px;
+            color: #ffffff;
+        }
+
+        th {
+            background-color: #008B8B;
+            color: #ffffff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(0, 206, 209, 0.2);
+        }
+
+        tr:hover {
+            background-color: rgba(0, 255, 255, 0.2);
+            transition: background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Product List</h2>
+
+    <nav>
+        <a href="index.html">Add Product</a>
+    </nav>
+
+    <table id="productTable">
+        <thead>
+            <tr>
+                <th>Product Code</th>
+                <th>Price</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody id="productTableBody"></tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchProducts();
+        });
+
+        function fetchProducts() {
+            var requestData = {
+               operation: 'listProduct'
+            };
+
+            fetch('https://7qr10w08f8.execute-api.us-east-2.amazonaws.com/dev/getData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            })
+            .then(response => response.json())
+            .then(responseData => {
+                const products = JSON.parse(responseData.body);
+                products.forEach(product => {
+                    updateProductTable(product);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching products:', error);
+            });
+        }
+
+        function updateProductTable(product) {
+            const tableBody = document.getElementById('productTableBody');
+            const row = document.createElement('tr');
+
+            const productCodeCell = document.createElement('td');
+            productCodeCell.textContent = product.productCode;
+            row.appendChild(productCodeCell);
+
+            const priceCell = document.createElement('td');
+            priceCell.textContent = product.price;
+            row.appendChild(priceCell);
+
+            const createdAtCell = document.createElement('td');
+            createdAtCell.textContent = new Date(product.createdAt).toLocaleString();
+            row.appendChild(createdAtCell);
+
+            tableBody.appendChild(row);
+        }
+    </script>
+
+</body>
+</html>
